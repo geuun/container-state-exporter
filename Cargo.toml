@@ -1,0 +1,15 @@
+[package]
+name = "container-state-exporter"
+version = "0.1.0"
+edition = "2021"
+description = "Docker 컨테이너 실행·healthcheck·재시작·OOM 상태를 Prometheus 메트릭으로 노출"
+
+[dependencies]
+serde_json = "1"
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+strip = true
+panic = "abort"
