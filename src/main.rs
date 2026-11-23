@@ -168,27 +168,27 @@ fn render(rows: &[Row]) -> String {
         }
     };
     let has_hc = |r: &Row| r.health != "none";
-    metric("docker_container_running", "gauge", "1 if the container is running.", &|r| Some(r.running as i64));
-    metric("docker_container_has_healthcheck", "gauge", "1 if the container defines a healthcheck.", &|r| {
+    metric("container_state_running", "gauge", "1 if the container is running.", &|r| Some(r.running as i64));
+    metric("container_state_has_healthcheck", "gauge", "1 if the container defines a healthcheck.", &|r| {
         Some(has_hc(r) as i64)
     });
     metric(
-        "docker_container_healthy",
+        "container_state_healthy",
         "gauge",
         "1 healthy, 0 otherwise. Only for containers with a healthcheck.",
         &|r| has_hc(r).then(|| (r.health == "healthy") as i64),
     );
-    metric("docker_container_unhealthy", "gauge", "1 if the healthcheck reports unhealthy.", &|r| {
+    metric("container_state_unhealthy", "gauge", "1 if the healthcheck reports unhealthy.", &|r| {
         Some((r.health == "unhealthy") as i64)
     });
-    metric("docker_container_restart_count", "counter", "Restarts done by the Docker restart policy.", &|r| {
+    metric("container_state_restart_count", "counter", "Restarts done by the Docker restart policy.", &|r| {
         Some(r.restart_count)
     });
-    metric("docker_container_oom_killed", "gauge", "1 if the last exit was an OOM kill.", &|r| {
+    metric("container_state_oom_killed", "gauge", "1 if the last exit was an OOM kill.", &|r| {
         Some(r.oom_killed as i64)
     });
-    metric("docker_container_exit_code", "gauge", "Exit code of the last run.", &|r| Some(r.exit_code));
-    metric("docker_container_started_at_seconds", "gauge", "Unix time the container last started.", &|r| {
+    metric("container_state_exit_code", "gauge", "Exit code of the last run.", &|r| Some(r.exit_code));
+    metric("container_state_started_at_seconds", "gauge", "Unix time the container last started.", &|r| {
         r.started_at
     });
     b
@@ -294,10 +294,10 @@ mod tests {
             started_at: None,
         }];
         let out = render(&rows);
-        assert!(out.contains("docker_container_running{container=\"a\"} 1\n"));
-        assert!(out.contains("docker_container_restart_count{container=\"a\"} 2\n"));
-        assert!(!out.contains("docker_container_healthy{"));
-        assert!(!out.contains("docker_container_started_at_seconds{"));
+        assert!(out.contains("container_state_running{container=\"a\"} 1\n"));
+        assert!(out.contains("container_state_restart_count{container=\"a\"} 2\n"));
+        assert!(!out.contains("container_state_healthy{"));
+        assert!(!out.contains("container_state_started_at_seconds{"));
     }
 
     #[test]

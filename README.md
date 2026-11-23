@@ -4,12 +4,12 @@ Docker 소켓(읽기 전용)으로 컨테이너 상태를 읽어 Prometheus 메�
 
 | 메트릭 | 설명 |
 |---|---|
-| `docker_container_running` | 1 = 실행 중 |
-| `docker_container_has_healthcheck` / `healthy` / `unhealthy` | healthcheck 상태 (`healthy`는 healthcheck가 있을 때만) |
-| `docker_container_restart_count` | Docker가 다시 시작한 횟수 |
-| `docker_container_oom_killed` | 마지막 종료가 OOM이면 1 |
-| `docker_container_exit_code` | 마지막 종료 코드 |
-| `docker_container_started_at_seconds` | 시작 시각 (unix) |
+| `container_state_running` | 1 = 실행 중 |
+| `container_state_has_healthcheck` / `healthy` / `unhealthy` | healthcheck 상태 (`healthy`는 healthcheck가 있을 때만) |
+| `container_state_restart_count` | Docker가 다시 시작한 횟수 |
+| `container_state_oom_killed` | 마지막 종료가 OOM이면 1 |
+| `container_state_exit_code` | 마지막 종료 코드 |
+| `container_state_started_at_seconds` | 시작 시각 (unix) |
 
 라벨: `container`, `compose_project`, `compose_service`, `restart_policy`, `channel`(컨테이너 라벨 `monitoring.channel`이 있을 때). `monitoring.exclude: "true"` 컨테이너와 compose가 재생성 중에 잠깐 만드는 `<id>_이름` 컨테이너는 건너뜁니다.
 
